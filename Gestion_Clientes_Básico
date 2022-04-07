@@ -4,7 +4,7 @@ from datetime import datetime
 clientes = {}
 habituales = {}
 fecha = datetime.now()
-#  (not nif_cliente[9:10].isdigit())
+
 
 
 def opcion1():

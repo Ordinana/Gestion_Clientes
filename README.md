@@ -1,0 +1,1 @@
+Programa básico para la gestión de datos en una cartera de clientes con sencillas opciones en el menú donde poder manejarse.
