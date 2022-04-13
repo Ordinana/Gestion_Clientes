@@ -84,7 +84,7 @@ def anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual):
 def eliminar_cliente():
     global informacion
     borrar_nif = input("Introduzca el NIF del cliente que desea eliminar: ")  # INTRODUCIR NIF
-    cliente = informacion[borrar_nif]
+    cliente = informacion.get(borrar_nif, None)
     if cliente:
         borrar = input("Desea borrar el cliente {}?: (si/no)".format(borrar_nif))
         if borrar == "si":
@@ -102,17 +102,16 @@ def eliminar_cliente():
 def mostrar_cliente():
     global informacion
     mostrar_nif = input("Introduzca el NIF del cliente a mostrar: ")  # INTRODUCIR NIF
-    while True:
-        for nif in informacion:
-            if mostrar_nif == nif:
-                print("Éstos son los datos del cliente:\n", nif, informacion[nif])
-                si_no = input("¿Desea mostrar otro? (si/no): ")  # ¿MOSTRAR OTRO?
-                if si_no == "si":
-                    mostrar_cliente()
-                else:
-                    break
-            else:
-                print("No se encuentra ningún cliente con dicho NIF")
+    cliente = informacion.get(mostrar_nif, None)
+    if cliente:
+        print("Éstos son los datos del cliente:\n", informacion[mostrar_nif])
+        si_no = input("¿Desea mostrar otro? (si/no): ")  # ¿MOSTRAR OTRO?
+        if si_no == "si":
+            mostrar_cliente()
+        else:
+            pass
+    else:
+        print("No se encuentra ningún cliente con dicho NIF")
 
 
 # ---METODO PARA LISTAR TODOS LOS CLIENTES (OPCION 4)---
