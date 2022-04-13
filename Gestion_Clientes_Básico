@@ -1,132 +1,171 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import *
 
-clientes = {}
-habituales = {}
+informacion = {}
 fecha = datetime.now()
 
 
+# METODOS PARA AÑADIR NUEVO CLIENTE (OPCION 1)
 
-def opcion1():
-    """ AÑADIR CLIENTE """
-    global clientes
-    print("Opción: Añadir Cliente.")
-    # PRIMERO PEDIMOS NIF
-    nif_cliente = input("Introduzca el NIF del nuevo cliente.\n(Recuerde que debe contener 8 digitos y 1 letra): ")
-    if nif_cliente[0:8].isdigit() and nif_cliente[-1].isalpha():
-        # DESPUES PEDIMOS DATOS PARA DICHO NIF
-        while True:
-            datos_cliente = {"Nombre": input("Introduzca su nombre: "),
-                             "Apellidos": input("Introduzca sus apellidos: "),
-                             "Direccion": input("Introduzca su dirección: "),
-                             "Telefono": (input("Introduzca un teléfono: ")),
-                             "Correo": input("Introduzca un correo electrónico: "),
-                             "Fecha Operación": (fecha.strftime("%d/%m/%Y"))}  # Dia/mes/año
-            if datos_cliente["Telefono"].isdigit():
-                clientes[nif_cliente] = datos_cliente
-                """clientes.update({nif_cliente:datos_cliente}) OTRA MANERA DE CREAR EL DICT."""
-                print(nif_cliente, clientes[nif_cliente])
-                si_no = input("¿Desea añadir otro? (si/no): ")
-                if si_no == "si":
-                    opcion1()
-                else:
-                    menu()
-                return clientes
-            else:
-                print("Teléfono erróneo")
-                opcion1()
+def anadir_nif():
+    nif = input("Introduzca el NIF del nuevo cliente.\n(Debe contener 8 digitos y 1 letra): ")
+    if nif[0:8].isdigit() and nif[-1].isalpha():
+        print("NIF correcto")
+        anadir_nombre_direccion(nif)
+        return nif
     else:
         print("ERROR en el NIF")
-        opcion1()
+        anadir_nif()
 
 
-def opcion2(clientes):
-    """ ELIMINAR CLIENTE """
-    print("Opción: Eliminar Cliente.")
+def anadir_nombre_direccion(nif):
+    nombre_completo = input("Introduzca nombre y apellidos: ")
+    direccion = input("Introduzca su dirección con número y puerta): ")
+    anadir_telefono(nif, nombre_completo, direccion)
+    return nombre_completo, direccion
+
+
+def anadir_telefono(nif, nombre_completo, direccion):
+    telf = (input("Introduzca un teléfono: "))
+    if telf.isdigit() and 10 > len(telf) > 8:
+        telefono = telf
+        anadir_correo(nif, nombre_completo, direccion, telefono)
+        return telefono
+    else:
+        print("Teléfono erróneo")
+        anadir_telefono(nif, nombre_completo, direccion)
+
+
+def anadir_correo(nif, nombre_completo, direccion, telefono):
+    email = input("Introduzca un correo electrónico: ")
+    if "@" in email:
+        correo = email
+        anadir_habitual(nif, nombre_completo, direccion, telefono, correo)
+        return correo
+    else:
+        print("Correo incorrecto. Debe llevar @")
+        anadir_correo(nif, nombre_completo, direccion, telefono)
+
+
+def anadir_habitual(nif, nombre_completo, direccion, telefono, correo):
+    si_no = input("¿Se trata de un cliente habitual?: (si/no)")
+    si_no = si_no.lower()
+    if si_no == "si":
+        habitual = True
+        anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual)
+        return habitual
+    else:
+        habitual = False
+        anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual)
+        return habitual
+
+
+def anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual):
+    datos_cliente = {"Nombre Completo": nombre_completo,
+                     "Dirección": direccion,
+                     "Teléfono": telefono,
+                     "Correo": correo,
+                     "Habitual": habitual,
+                     "Fecha Operación": fecha}
+    informacion[nif] = datos_cliente
+    # informacion.update({nif: datos_cliente})
+    print(nif)
+    print(informacion[nif])
+
+    si_no = input("¿Desea añadir otro? (si/no): ")
+    if si_no == "si":
+        anadir_nif()
+        return informacion, nif
+    else:
+        # menu(nif)
+        return informacion, nif
+
+
+# ---METODO PARA ELIMINAR CLIENTE (OPCION 2)---
+def eliminar_cliente():
+    global informacion
     borrar_nif = input("Introduzca el NIF del cliente que desea eliminar: ")  # INTRODUCIR NIF
     while True:
-        for nif in clientes:
-            if borrar_nif == nif:
-                print("¿Desea eliminar éste cliente?\n", nif, clientes[nif])  # CONFIRMAR ELIMINACION
+        for key in informacion:
+            if borrar_nif in informacion:
+                print("¿Desea eliminar éste cliente?\n", key, informacion[borrar_nif])  # CONFIRMAR ELIMINACION
                 si_no = input("(si/no): ")
                 if si_no == "si":
-                    del clientes[nif]
+                    del informacion[borrar_nif]
                     print("Cliente eliminado")
-                    si_no = input("¿Desea eliminar otro? (si/no): ")  # ¿ELIMINAR OTRO?
-                    if si_no == "si":
-                        opcion2(clientes)
-                    else:
-                        menu()
+                    # menu(nif)
+                    return informacion
                 else:
                     print("No eliminado")
-                    menu()
+                    # menu(nif)
+                    return informacion
             else:
                 print("El NIF introducido no coincide con ningún cliente.")
-                menu()
+                # menu(nif)
 
 
-def opcion3(clientes):
-    """ MOSTRAR CLIENTE """
-    print("Opción: Mostrar Cliente")
+# ---METODO PARA MOSTRAR UN CLIENTE (OPCION 3)---
+def mostrar_cliente():
+    global informacion
     mostrar_nif = input("Introduzca el NIF del cliente a mostrar: ")  # INTRODUCIR NIF
     while True:
-        for nif in clientes:
+        for nif in informacion:
             if mostrar_nif == nif:
-                print("Éstos son los datos de dicho cliente:\n", nif, clientes[nif])
+                print("Éstos son los datos del cliente:\n", nif, informacion[nif])
                 si_no = input("¿Desea mostrar otro? (si/no): ")  # ¿MOSTRAR OTRO?
                 if si_no == "si":
-                    opcion3(clientes)
+                    mostrar_cliente()
                 else:
-                    menu()
+                    break
             else:
                 print("No se encuentra ningún cliente con dicho NIF")
-                menu()
+                # menu(nif)
 
 
-def opcion4(clientes):
-    """ LISTAR TODOS LOS CLIENTES """
-    print("Opción: Lista de Clientes")
+# ---METODO PARA LISTAR TODOS LOS CLIENTES (OPCION 4)---
+def todos_clientes():
     i = 1
-    for nif in clientes:
-        print("Cliente:", i, "=", nif, clientes[nif])
+    for nif in informacion:
+        print("Cliente:", i, "=", nif, informacion[nif])
         i += 1
-    menu()
+    # menu(nif)
 
 
-def opcion5(habituales):
-    """ LISTAR  CLIENTES HABITUALES"""
-    print("Opción: Lista de Clientes Habituales")
+# ---METODO PARA LISTAR TODOS LOS HABITUALES (OPCION 5)---
+def todos_habituales():
     i = 1
-    for nif in habituales:
-        print("Cliente:", i, "=", nif, habituales[nif])
-        i += 1
-    menu()
+    for nif in informacion:
+        if "True" in informacion[nif:nif]:
+            print("Cliente:", i, "=", nif, informacion[nif])
+            i += 1
+    # menu(nif)
 
-def menu():
-    print("En función de la opción elegida, el programa podrá:\n"
+
+# ---MENÚ---
+seguir = True
+while seguir:
+    print("En función de la opción elegida, el programa podrá hacer:\n"
           "(1) Añadir cliente\n"
           "(2) Eliminar cliente\n"
           "(3) Mostrar cliente\n"
           "(4) Listar todos los clientes\n"
           "(5) Listar clientes habituales\n"
           "(6) Salir del programa")
-    while True:
-        opcion = int(input("Elija una opción del menú: "))
-        if 0 < opcion < 7:
-            if opcion == 1:
-                opcion1()
-            elif opcion == 2:
-                opcion2(clientes)
-            elif opcion == 3:
-                opcion3(clientes)
-            elif opcion == 4:
-                opcion4(clientes)
-            elif opcion == 5:
-                opcion5(clientes)
-            elif opcion == 6:
-                break
-        else:
-            print("Debe ser entre la opción 1 y 6")
+    opcion = int(input("Elija una opción del menú: "))
+    if 0 < opcion < 7:
+        if opcion == 1:
+            anadir_nif()
+        elif opcion == 2:
+            eliminar_cliente()
+        elif opcion == 3:
+            mostrar_cliente()
+        elif opcion == 4:
+            todos_clientes()
+        elif opcion == 5:
+            todos_habituales()
+        elif opcion == 6:
+            seguir = False
 
+    else:
+        print("Debe ser entre la opción 1 y 6")
 
-menu()
