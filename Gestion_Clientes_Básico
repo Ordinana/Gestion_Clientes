@@ -77,7 +77,6 @@ def anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual):
         anadir_nif()
         return informacion, nif
     else:
-        # menu(nif)
         return informacion, nif
 
 
@@ -85,23 +84,18 @@ def anadir_datos(nif, nombre_completo, direccion, telefono, correo, habitual):
 def eliminar_cliente():
     global informacion
     borrar_nif = input("Introduzca el NIF del cliente que desea eliminar: ")  # INTRODUCIR NIF
-    while True:
-        for key in informacion:
-            if borrar_nif in informacion:
-                print("¿Desea eliminar éste cliente?\n", key, informacion[borrar_nif])  # CONFIRMAR ELIMINACION
-                si_no = input("(si/no): ")
-                if si_no == "si":
-                    del informacion[borrar_nif]
-                    print("Cliente eliminado")
-                    # menu(nif)
-                    return informacion
-                else:
-                    print("No eliminado")
-                    # menu(nif)
-                    return informacion
-            else:
-                print("El NIF introducido no coincide con ningún cliente.")
-                # menu(nif)
+    cliente = informacion[borrar_nif]
+    if cliente:
+        borrar = input("Desea borrar el cliente {}?: (si/no)".format(borrar_nif))
+        if borrar == "si":
+            del informacion[borrar_nif]
+            print("Cliente eliminado")
+            return informacion
+        else:
+            print("No eliminado")
+            return informacion
+    else:
+        print("Cliente con NIF {} no encontrado.".format(borrar_nif))
 
 
 # ---METODO PARA MOSTRAR UN CLIENTE (OPCION 3)---
@@ -119,7 +113,6 @@ def mostrar_cliente():
                     break
             else:
                 print("No se encuentra ningún cliente con dicho NIF")
-                # menu(nif)
 
 
 # ---METODO PARA LISTAR TODOS LOS CLIENTES (OPCION 4)---
@@ -128,7 +121,6 @@ def todos_clientes():
     for nif in informacion:
         print("Cliente:", i, "=", nif, informacion[nif])
         i += 1
-    # menu(nif)
 
 
 # ---METODO PARA LISTAR TODOS LOS HABITUALES (OPCION 5)---
@@ -138,7 +130,6 @@ def todos_habituales():
         if "True" in informacion[nif:nif]:
             print("Cliente:", i, "=", nif, informacion[nif])
             i += 1
-    # menu(nif)
 
 
 # ---MENÚ---
