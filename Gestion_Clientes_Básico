@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import *
+from multiprocessing.sharedctypes import Value
 
 informacion = {}
 fecha = datetime.now()
@@ -20,7 +21,7 @@ def anadir_nif():
 
 def anadir_nombre_direccion(nif):
     nombre_completo = input("Introduzca nombre y apellidos: ")
-    direccion = input("Introduzca su dirección con número y puerta): ")
+    direccion = input("Introduzca su dirección con número y puerta: ")
     anadir_telefono(nif, nombre_completo, direccion)
     return nombre_completo, direccion
 
@@ -126,7 +127,7 @@ def todos_clientes():
 def todos_habituales():
     i = 1
     for nif in informacion:
-        if "True" in informacion[nif:nif]:
+        if True in informacion[nif:Value]:
             print("Cliente:", i, "=", nif, informacion[nif])
             i += 1
 
@@ -158,4 +159,3 @@ while seguir:
 
     else:
         print("Debe ser entre la opción 1 y 6")
-
