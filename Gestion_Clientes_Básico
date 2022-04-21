@@ -117,32 +117,34 @@ def mostrar_cliente():
 
 # ---METODO PARA LISTAR TODOS LOS CLIENTES (OPCION 4)---
 def todos_clientes():
+    global informacion
     i = 1
     for nif in informacion:
-        print("Cliente:", i, "=", nif, informacion[nif])
+        print("\nCliente:", i, "=", nif, informacion[nif])
         i += 1
 
 
 # ---METODO PARA LISTAR TODOS LOS HABITUALES (OPCION 5)---
 def todos_habituales():
+    global informacion
     i = 1
     for nif in informacion:
-        if True in informacion[nif:Value]:
-            print("Cliente:", i, "=", nif, informacion[nif])
+        if True in informacion[nif].values():
+            print("\nCliente:", i, "=", nif, informacion[nif])
             i += 1
 
 
 # ---MENÚ---
 seguir = True
 while seguir:
-    print("En función de la opción elegida, el programa podrá hacer:\n"
+    print("\nEn función de la opción elegida, el programa podrá hacer:\n"
           "(1) Añadir cliente\n"
           "(2) Eliminar cliente\n"
           "(3) Mostrar cliente\n"
           "(4) Listar todos los clientes\n"
           "(5) Listar clientes habituales\n"
           "(6) Salir del programa")
-    opcion = int(input("Elija una opción del menú: "))
+    opcion = int(input("\nElija una opción del menú: "))
     if 0 < opcion < 7:
         if opcion == 1:
             anadir_nif()
