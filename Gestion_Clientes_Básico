@@ -3,11 +3,10 @@ from datetime import *
 from multiprocessing.sharedctypes import Value
 
 informacion = {}
-fecha = datetime.now()
+fecha = datetime.today().strftime("%Y/%m/%d")
 
 
-# METODOS PARA AÑADIR NUEVO CLIENTE (OPCION 1)
-
+# ---METODOS PARA AÑADIR NUEVO CLIENTE (OPCION 1)---
 def anadir_nif():
     nif = input("Introduzca el NIF del nuevo cliente.\n(Debe contener 8 digitos y 1 letra): ")
     if nif[0:8].isdigit() and nif[-1].isalpha():
